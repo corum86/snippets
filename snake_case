@@ -1,0 +1,20 @@
+function snake_case($string)
+{
+    if (function_exists('transliterator_transliterate')) {
+//        echo $string . "<br>";
+        $transliterator = Transliterator::create('Any-Latin; Latin-ASCII; Lower()');
+        $tmp = preg_replace('/[^a-zA-Z\d]/',' ',$transliterator->transliterate($string));
+        $res = preg_replace('/\s+/', '_', $tmp);
+        $res = preg_replace('/(\d)_0/', 'v$1', $res);
+        $res = str_replace('_r_', "-", $res);
+        $res = str_replace('_sup_reg_sup_', "_", $res);
+        $res = trim($res, '_');
+        return strtolower($res);
+    } else {
+        //fallback if Transliterator is not available
+        setlocale(LC_ALL,'en_UK.utf8');
+//        $string = 'A æ Übérmensch på høyeste nivå! И я люблю PHP! есть. ﬁ ¦';
+        $res = trim(preg_replace('[^a-zA-Z\d\-]','_',iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $string)), '-');
+        return strtolower($res);
+    }
+}
