@@ -1,10 +1,14 @@
-<?php $iter = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('mediafiles'));
-foreach($iter as $file) {
-    if ($file->getFilename() == '.') {
-        $path = substr($file->getPath(), 0, strripos($file->getPath(), '/'));
-        $file_name = snake_case(end(explode('/', $file->getPath()))) . '.zip';
-        $path_file = $file->getPath() . '/' . $file_name;
-        zipData($file->getPath() . '/', $path_file);
+<?php 
+
+function recursiveDirZip($startDir){
+    $iter = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($startDir));
+    foreach($iter as $file) {
+        if ($file->getFilename() == '.') {
+            $path = substr($file->getPath(), 0, strripos($file->getPath(), '/'));
+            $file_name = snake_case(end(explode('/', $file->getPath()))) . '.zip';
+            $path_file = $file->getPath() . '/' . $file_name;
+            zipData($file->getPath() . '/', $path_file);
+        }
     }
 }
 
